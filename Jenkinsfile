@@ -21,7 +21,7 @@ pipeline {
       }
       stage('Start test app') {
          steps {
-            pwsh(script: """
+            powershell(script: """
                docker-compose up -d
                ./scripts/test_container.ps1
             """)
@@ -37,14 +37,14 @@ pipeline {
       }
       stage('Run Tests') {
          steps {
-            pwsh(script: """
+            powershell(script: """
                pytest ./tests/test_sample.py
             """)
          }
       }
       stage('Stop test app') {
          steps {
-            pwsh(script: """
+            powershell(script: """
                docker-compose down
             """)
          }
@@ -53,7 +53,7 @@ pipeline {
          parallel {
             stage('Run Anchore') {
                steps {
-                  pwsh(script: """
+                  powershell(script: """
                      Write-Output "blackdentech/jenkins-course" > anchore_images
                   """)
                   anchore bailOnFail: false, bailOnPluginFail: false, name: 'anchore_images'
